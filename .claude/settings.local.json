@@ -5,7 +5,8 @@
       "Bash(npm install:*)",
       "Bash(do touch:*)",
       "Bash(npx tsc:*)",
-      "Bash(npx turbo:*)"
+      "Bash(npx turbo:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
