@@ -78,6 +78,39 @@ This starts:
 - BFF: http://localhost:3001
 - API Docs: http://localhost:3001/api/docs
 
+## Usage Example
+
+Once everything is running, open http://localhost:5173 and start chatting with the HR Assistant.
+
+### Checking vacation balance
+
+Select an employee from the dropdown and ask about their vacation days. The agent calls `getRemainingVacationDays` and responds with a structured summary:
+
+![Vacation balance query for Carlos Lopez](docs/screenshots/chat-vacation-balance.png)
+
+### Requesting time off
+
+The agent proactively checks your balance and team calendar before processing a time off request:
+
+![Time off request flow for Maria Garcia](docs/screenshots/chat-time-off-request.png)
+
+### Server logs
+
+The BFF logs show the full ReAct agent loop with LLM latency, token usage, and tool execution:
+
+```
+[Nest] LOG [LlmService] LLM chat: 4999ms | tokens=1033 (prompt=1011, completion=22) | finish=tool_calls
+[Nest] LOG [McpService] Executing tool: getRemainingVacationDays with args: {"employeeId":"EMP001"}
+[Nest] LOG [LlmService] LLM chat: 1608ms | tokens=691 (prompt=634, completion=57) | finish=stop
+[Nest] LOG [LlmService] LLM stream: 1672ms | chunks=56
+```
+
+Key metrics visible per request:
+- **LLM latency**: ~1.5–5s per call depending on prompt size
+- **Token usage**: prompt vs completion tokens for cost tracking
+- **Finish reason**: `tool_calls` (agent needs a tool) vs `stop` (final answer ready)
+- **Stream chunks**: real-time token delivery to the UI
+
 ## What I'd Improve With More Time
 
 1. **Streaming in the agent loop**: Currently, the tool-calling iterations use non-streaming calls. The final response streams, but intermediate "thinking" steps could stream too.
