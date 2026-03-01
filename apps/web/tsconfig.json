@@ -1,0 +1,7 @@
+{
+  "extends": "@hr-agent/tsconfig/react.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["src"]
+}
