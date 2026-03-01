@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
+import type OpenAI from 'openai';
 import { LlmService } from '../llm/llm.service';
 import { McpService } from '../mcp/mcp.service';
 import { SessionService } from '../session/session.service';
@@ -62,9 +63,9 @@ export class AgentService {
 
       // 5. Agent loop
       let iterations = 0;
-      const messages: any[] = [
+      const messages: OpenAI.ChatCompletionMessageParam[] = [
         systemMessage,
-        ...history.map(m => ({ role: m.role, content: m.content })),
+        ...history.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
       ];
 
       while (iterations < maxIterations) {

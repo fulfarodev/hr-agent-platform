@@ -22,11 +22,13 @@ export function useChat() {
   const socketRef = useRef<ChatSocket | null>(null);
   const streamingContentRef = useRef('');
   const activeToolCallsRef = useRef<ActiveToolCall[]>([]);
+  const isStreamingRef = useRef(false);
 
   useEffect(() => {
     const socket = createChatSocket({
       url: API_URL,
       onToken: (data) => {
+        isStreamingRef.current = true;
         setIsStreaming(true);
         streamingContentRef.current += data.token;
         setCurrentStreamingMessage(streamingContentRef.current);
@@ -64,6 +66,7 @@ export function useChat() {
         };
 
         setMessages((prev) => [...prev, assistantMessage]);
+        isStreamingRef.current = false;
         setIsStreaming(false);
         setCurrentStreamingMessage('');
         streamingContentRef.current = '';
@@ -72,6 +75,7 @@ export function useChat() {
       },
       onError: (data) => {
         setError(data.error);
+        isStreamingRef.current = false;
         setIsStreaming(false);
         setCurrentStreamingMessage('');
         streamingContentRef.current = '';
@@ -90,9 +94,12 @@ export function useChat() {
     };
   }, []);
 
+  const sessionIdRef = useRef(sessionId);
+  sessionIdRef.current = sessionId;
+
   const sendMessage = useCallback(
     (content: string, employeeId: string) => {
-      if (!socketRef.current || isStreaming) return;
+      if (!socketRef.current || isStreamingRef.current) return;
 
       const userMessage: ChatMessage = {
         id: `user-${Date.now()}`,
@@ -103,17 +110,18 @@ export function useChat() {
 
       setMessages((prev) => [...prev, userMessage]);
       setError(null);
+      isStreamingRef.current = true;
       setIsStreaming(true);
       streamingContentRef.current = '';
       setCurrentStreamingMessage('');
 
       socketRef.current.emit('chat:message', {
-        sessionId: sessionId ?? '',
+        sessionId: sessionIdRef.current ?? '',
         content,
         employeeId,
       });
     },
-    [sessionId, isStreaming],
+    [],
   );
 
   return {

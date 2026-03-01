@@ -35,7 +35,6 @@ export default function ChatWindow({ employeeId, onEmployeeChange }: ChatWindowP
 
   const hasMessages = messages.length > 0;
 
-  // Build a streaming message object for display
   const streamingBubble: ChatMessage | null =
     isStreaming && currentStreamingMessage
       ? {
@@ -47,13 +46,10 @@ export default function ChatWindow({ employeeId, onEmployeeChange }: ChatWindowP
       : null;
 
   return (
-    <div className="flex h-full flex-col bg-slate-50">
+    <div className="flex h-full flex-col bg-stone-50">
       <SessionHeader employeeId={employeeId} onEmployeeChange={onEmployeeChange} />
 
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto scrollbar-thin"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
         {!hasMessages ? (
           <WelcomeScreen onSuggestionClick={handleSend} />
         ) : (
@@ -64,7 +60,6 @@ export default function ChatWindow({ employeeId, onEmployeeChange }: ChatWindowP
               ))}
             </AnimatePresence>
 
-            {/* Active tool calls during streaming */}
             {isStreaming && activeToolCalls.length > 0 && !streamingBubble && (
               <MessageBubble
                 message={{
@@ -77,7 +72,6 @@ export default function ChatWindow({ employeeId, onEmployeeChange }: ChatWindowP
               />
             )}
 
-            {/* Streaming message with active tool calls */}
             {streamingBubble && (
               <MessageBubble
                 message={streamingBubble}
@@ -86,7 +80,6 @@ export default function ChatWindow({ employeeId, onEmployeeChange }: ChatWindowP
               />
             )}
 
-            {/* Typing indicator when streaming hasn't produced tokens yet */}
             <AnimatePresence>
               {isStreaming && !currentStreamingMessage && activeToolCalls.length === 0 && (
                 <TypingIndicator />
@@ -98,7 +91,7 @@ export default function ChatWindow({ employeeId, onEmployeeChange }: ChatWindowP
 
       {error && (
         <div className="mx-auto max-w-3xl px-4">
-          <div className="mb-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600">
+          <div className="mb-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs text-red-600">
             {error}
           </div>
         </div>

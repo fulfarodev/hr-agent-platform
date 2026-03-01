@@ -22,31 +22,31 @@ export default function MessageBubble({ message, isStreaming, activeToolCalls }:
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-      className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+      className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-5`}
     >
-      <div className={`max-w-[75%] ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
+      <div className={`max-w-[72%] ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
         <div
           className={`
-            px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap
+            px-4 py-3 text-[14px] leading-relaxed whitespace-pre-wrap
             ${
               isUser
-                ? 'rounded-2xl rounded-br-md bg-indigo-600 text-white'
-                : 'rounded-2xl rounded-bl-md bg-white text-slate-800 shadow-sm border border-slate-100'
+                ? 'rounded-2xl rounded-br-sm bg-zinc-900 text-white'
+                : 'rounded-2xl rounded-bl-sm bg-white text-zinc-800 border border-zinc-100'
             }
           `}
         >
           {message.content}
           {isStreaming && (
-            <span className="inline-block w-1.5 h-4 ml-0.5 -mb-0.5 bg-slate-400 animate-pulse rounded-sm" />
+            <span className="inline-block w-[3px] h-[18px] ml-0.5 -mb-1 bg-zinc-400 animate-pulse rounded-full" />
           )}
         </div>
 
-        {/* Tool calls for assistant messages */}
+        {/* Active tool calls during streaming */}
         {!isUser && activeToolCalls && activeToolCalls.length > 0 && (
-          <div className="w-full mt-1">
+          <div className="w-full mt-2">
             {activeToolCalls.map((tc, i) => (
               <ToolCallCard
                 key={`${tc.name}-${i}`}
@@ -61,7 +61,7 @@ export default function MessageBubble({ message, isStreaming, activeToolCalls }:
 
         {/* Tool calls stored on the message */}
         {!isUser && !activeToolCalls?.length && message.toolCalls && message.toolCalls.length > 0 && (
-          <div className="w-full mt-1">
+          <div className="w-full mt-2">
             {message.toolCalls.map((tc) => (
               <ToolCallCard
                 key={tc.id}
@@ -73,9 +73,7 @@ export default function MessageBubble({ message, isStreaming, activeToolCalls }:
           </div>
         )}
 
-        <span
-          className={`mt-1 text-[11px] text-slate-400 ${isUser ? 'text-right' : 'text-left'} px-1`}
-        >
+        <span className={`mt-1.5 text-[11px] text-zinc-400 ${isUser ? 'text-right' : 'text-left'} px-1`}>
           {formatTime(message.timestamp)}
         </span>
       </div>

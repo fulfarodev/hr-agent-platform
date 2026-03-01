@@ -1,35 +1,28 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const dotVariants = {
-  initial: { y: 0 },
-  animate: { y: -4 },
-};
-
 export default function TypingIndicator() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="flex justify-start mb-4"
+      className="flex justify-start mb-5"
     >
-      <div className="rounded-2xl rounded-bl-md bg-white px-4 py-3 shadow-sm border border-slate-100">
+      <div className="rounded-2xl rounded-bl-sm bg-white px-4 py-3 border border-zinc-100">
         <div className="flex items-center gap-1">
           {[0, 1, 2].map((i) => (
             <motion.span
               key={i}
-              variants={dotVariants}
-              initial="initial"
-              animate="animate"
+              animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{
-                duration: 0.4,
+                duration: 1.2,
                 repeat: Infinity,
-                repeatType: 'reverse',
-                delay: i * 0.15,
+                delay: i * 0.2,
+                ease: 'easeInOut',
               }}
-              className="inline-block w-2 h-2 rounded-full bg-slate-400"
+              className="inline-block w-1.5 h-1.5 rounded-full bg-zinc-400"
             />
           ))}
         </div>

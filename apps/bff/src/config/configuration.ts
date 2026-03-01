@@ -1,5 +1,6 @@
 export default () => ({
   port: parseInt(process.env.PORT ?? '3001', 10) || 3001,
+  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   ollama: {
     baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
     model: process.env.OLLAMA_MODEL || 'llama3.1:8b-instruct-q5_K_M',
