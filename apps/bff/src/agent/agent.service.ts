@@ -75,7 +75,7 @@ export class AgentService {
         const choice = response.choices[0];
 
         // Check if response contains tool calls
-        if (choice.message.tool_calls?.length > 0) {
+        if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
           const toolCalls = choice.message.tool_calls;
 
           // Add assistant message with tool calls to messages

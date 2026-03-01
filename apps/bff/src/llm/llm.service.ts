@@ -6,11 +6,11 @@ import OpenAI from 'openai';
 export class LlmService {
   private readonly logger = new Logger(LlmService.name);
   private client: OpenAI;
-  private model: string;
+  private model!: string;
 
   constructor(private readonly config: ConfigService) {
     const baseUrl = this.config.get<string>('ollama.baseUrl');
-    this.model = this.config.get<string>('ollama.model');
+    this.model = this.config.get<string>('ollama.model')!;
 
     this.client = new OpenAI({
       baseURL: baseUrl,
@@ -37,8 +37,8 @@ export class LlmService {
       }
 
       return await this.client.chat.completions.create(params);
-    } catch (error) {
-      if (error?.code === 'ECONNREFUSED' || error?.message?.includes('ECONNREFUSED')) {
+    } catch (error: unknown) {
+      if ((error as any)?.code === 'ECONNREFUSED' || (error as Error)?.message?.includes('ECONNREFUSED')) {
         throw new Error(
           'Ollama is not available. Please ensure Ollama is running: `ollama serve` and the model is pulled: `ollama pull llama3.1:8b-instruct-q5_K_M`',
         );
@@ -68,8 +68,8 @@ export class LlmService {
       for await (const chunk of stream) {
         yield chunk;
       }
-    } catch (error) {
-      if (error?.code === 'ECONNREFUSED' || error?.message?.includes('ECONNREFUSED')) {
+    } catch (error: unknown) {
+      if ((error as any)?.code === 'ECONNREFUSED' || (error as Error)?.message?.includes('ECONNREFUSED')) {
         throw new Error(
           'Ollama is not available. Please ensure Ollama is running: `ollama serve` and the model is pulled: `ollama pull llama3.1:8b-instruct-q5_K_M`',
         );

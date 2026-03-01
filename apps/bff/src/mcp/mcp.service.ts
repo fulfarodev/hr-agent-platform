@@ -6,8 +6,8 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 @Injectable()
 export class McpService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(McpService.name);
-  private client: Client;
-  private transport: StdioClientTransport;
+  private client!: Client;
+  private transport!: StdioClientTransport;
   private connected = false;
   private cachedTools: any[] = [];
 
@@ -19,10 +19,10 @@ export class McpService implements OnModuleInit, OnModuleDestroy {
       const args = this.config.get<string[]>('mcp.serverArgs');
       const cwd = this.config.get<string>('mcp.serverCwd');
 
-      this.logger.log(`Starting MCP server: ${command} ${args.join(' ')} in ${cwd}`);
+      this.logger.log(`Starting MCP server: ${command} ${args!.join(' ')} in ${cwd}`);
 
       this.transport = new StdioClientTransport({
-        command,
+        command: command!,
         args,
         cwd,
       });
@@ -36,8 +36,8 @@ export class McpService implements OnModuleInit, OnModuleDestroy {
       this.cachedTools = result.tools;
 
       this.logger.log(`MCP connected. Available tools: ${this.cachedTools.map(t => t.name).join(', ')}`);
-    } catch (error) {
-      this.logger.error(`Failed to connect to MCP server: ${error.message}`);
+    } catch (error: unknown) {
+      this.logger.error(`Failed to connect to MCP server: ${(error as Error).message}`);
       this.connected = false;
     }
   }
@@ -65,8 +65,8 @@ export class McpService implements OnModuleInit, OnModuleDestroy {
       try {
         await this.client.close();
         this.logger.log('MCP client closed');
-      } catch (error) {
-        this.logger.error(`Error closing MCP client: ${error.message}`);
+      } catch (error: unknown) {
+        this.logger.error(`Error closing MCP client: ${(error as Error).message}`);
       }
     }
   }

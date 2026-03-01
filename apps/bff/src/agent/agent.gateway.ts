@@ -11,7 +11,7 @@ import { AgentService } from './agent.service';
 @WebSocketGateway({ cors: { origin: 'http://localhost:5173' } })
 export class AgentGateway implements OnGatewayConnection {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   constructor(private readonly agent: AgentService) {}
 
