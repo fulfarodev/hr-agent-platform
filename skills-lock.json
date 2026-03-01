@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-creator": {
+      "source": "erichowens/some_claude_skills",
+      "sourceType": "github",
+      "computedHash": "e3332dcbfd4e0f8759a27b89ad0f5e5001a004e2bab37960ec65916206d5948f"
+    },
+    "changelog-automation": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "87e8104a7842f5fff034e926ae7ae6fa20708a2735284b6e6906f681bc060f74"
+    },
+    "fastapi-expert": {
+      "source": "jeffallan/claude-skills",
+      "sourceType": "github",
+      "computedHash": "7e8421112b067bfe61592ad3a71c18d4a2ce7d4f10443b06a5952d166c7b60fe"
+    },
+    "llm-app-patterns": {
+      "source": "davila7/claude-code-templates",
+      "sourceType": "github",
+      "computedHash": "a346181a23065116d42410f1b109200ee157677bc8fca15158547cf945b231df"
+    },
+    "nestjs-best-practices": {
+      "source": "kadajett/agent-nestjs-skills",
+      "sourceType": "github",
+      "computedHash": "68658903272e1015f3ec5084c7d0988216a47f42f675ed819a675250fc6a23cd"
+    },
+    "prompt-engineer": {
+      "source": "davila7/claude-code-templates",
+      "sourceType": "github",
+      "computedHash": "8fdaa14384b7a83271e1a03bf0828627dd78525aa3c65ccb2566519623ad96ae"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "61f8c307aa8ce0c4c52da8886d42e344dab83f76f9b5360cf8923b25fb1d67bb"
+    }
+  }
+}

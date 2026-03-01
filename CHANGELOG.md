@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- CLAUDE.md project guidance for Claude Code
+- Claude Code agent skills: NestJS, React, FastAPI, changelog-automation, LLM patterns, prompt engineering
+- Claude Code local settings and skills lockfile
+
 ## [0.1.0] - 2026-03-01
 
 ### Added
