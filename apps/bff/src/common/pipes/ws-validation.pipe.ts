@@ -1,6 +1,5 @@
 import { PipeTransform, Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
-import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class WsValidationPipe implements PipeTransform {
       throw new WsException('Invalid payload: expected an object');
     }
 
-    const instance = plainToInstance(this.dtoClass, value);
+    const instance = Object.assign(new this.dtoClass(), value);
     const errors = await validate(instance, {
       whitelist: true,
       forbidNonWhitelisted: true,

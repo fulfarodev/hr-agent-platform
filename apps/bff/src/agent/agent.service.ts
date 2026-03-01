@@ -39,10 +39,8 @@ export class AgentService {
       let session = this.session.get(sessionId);
       if (!session) {
         session = this.session.create(employeeId);
-        // Re-map sessionId to the created session's ID if they differ
-        if (session.id !== sessionId) {
-          this.logger.warn(`Session ${sessionId} not found, created new session ${session.id}`);
-        }
+        this.logger.warn(`Session ${sessionId} not found, created new session ${session.id}`);
+        sessionId = session.id;
       }
 
       // 2. Add user message to history

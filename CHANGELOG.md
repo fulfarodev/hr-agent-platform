@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Connection logging in WebSocket gateway (BFF)
 - DM Sans and JetBrains Mono typography via Google Fonts (Web)
 - Custom Tailwind color tokens: surface, ink, line (Web)
+- Markdown rendering in assistant messages: `**bold**` and `*italic*` support (Web)
 
 ### Changed
 
@@ -39,6 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scrollbar reduced to 4px with subtle hover state (Web)
 - `sendMessage` callback stabilized with refs to avoid unnecessary re-renders (Web)
 - `useChat` uses `isStreamingRef` to prevent stale closures in callbacks (Web)
+- Gateway creates session via `SessionService` on connection instead of raw UUID (BFF)
+- `sessionId` made optional in `ChatMessageDto` to support first-message flows (BFF)
+- Validation pipe uses `Object.assign` instead of `class-transformer` dependency (BFF)
+- Agent service reassigns `sessionId` when creating a new session for unknown IDs (BFF)
 
 ## [0.1.0] - 2026-03-01
 

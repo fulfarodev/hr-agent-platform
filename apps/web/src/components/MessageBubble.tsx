@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import type { ChatMessage } from '@hr-agent/shared-types';
 import ToolCallCard from './ToolCallCard';
@@ -17,8 +17,45 @@ function formatTime(timestamp: number): string {
   });
 }
 
+function renderFormattedText(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  // Match **bold**, *italic*, or plain text segments
+  const regex = /(\*\*(.+?)\*\*|\*(.+?)\*)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    // Add text before this match
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+
+    if (match[2]) {
+      // **bold**
+      parts.push(<strong key={match.index} className="font-semibold">{match[2]}</strong>);
+    } else if (match[3]) {
+      // *italic*
+      parts.push(<em key={match.index}>{match[3]}</em>);
+    }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add remaining text
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
+}
+
 export default function MessageBubble({ message, isStreaming, activeToolCalls }: MessageBubbleProps) {
   const isUser = message.role === 'user';
+
+  const formattedContent = useMemo(() => {
+    if (isUser || !message.content) return null;
+    return renderFormattedText(message.content);
+  }, [message.content, isUser]);
 
   return (
     <motion.div
@@ -38,7 +75,7 @@ export default function MessageBubble({ message, isStreaming, activeToolCalls }:
             }
           `}
         >
-          {message.content}
+          {isUser ? message.content : formattedContent}
           {isStreaming && (
             <span className="inline-block w-[3px] h-[18px] ml-0.5 -mb-1 bg-zinc-400 animate-pulse rounded-full" />
           )}

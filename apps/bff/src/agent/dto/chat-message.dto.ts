@@ -1,9 +1,9 @@
 import { IsString, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
 export class ChatMessageDto {
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  sessionId!: string;
+  sessionId?: string;
 
   @IsString()
   @IsNotEmpty()

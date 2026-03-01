@@ -6,14 +6,13 @@ import {
   ConnectedSocket,
   MessageBody,
 } from '@nestjs/websockets';
-import { UseFilters, UsePipes, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { UseFilters, Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { v4 as uuid } from 'uuid';
 import { AgentService } from './agent.service';
 import { ChatMessageDto } from './dto/chat-message.dto';
 import { WsExceptionFilter } from '../common/filters/ws-exception.filter';
 import { WsValidationPipe } from '../common/pipes/ws-validation.pipe';
+import { SessionService } from '../session/session.service';
 
 @UseFilters(new WsExceptionFilter())
 @WebSocketGateway({
@@ -27,20 +26,22 @@ export class AgentGateway implements OnGatewayConnection {
 
   private readonly logger = new Logger(AgentGateway.name);
 
-  constructor(private readonly agent: AgentService) {}
+  constructor(
+    private readonly agent: AgentService,
+    private readonly session: SessionService,
+  ) {}
 
   handleConnection(client: Socket) {
-    const sessionId = uuid();
-    client.emit('session:created', { sessionId });
-    client.data.sessionId = sessionId;
-    this.logger.log(`Client connected: ${client.id}, session: ${sessionId}`);
+    const session = this.session.create('EMP001');
+    client.emit('session:created', { sessionId: session.id });
+    client.data.sessionId = session.id;
+    this.logger.log(`Client connected: ${client.id}, session: ${session.id}`);
   }
 
   @SubscribeMessage('chat:message')
-  @UsePipes(new WsValidationPipe(ChatMessageDto))
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() payload: ChatMessageDto,
+    @MessageBody(new WsValidationPipe(ChatMessageDto)) payload: ChatMessageDto,
   ) {
     const employeeId = payload.employeeId || 'EMP001';
     const sessionId = payload.sessionId || client.data.sessionId;
